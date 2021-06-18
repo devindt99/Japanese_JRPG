@@ -1,6 +1,6 @@
 package pkg.models;
 
-import pkg.game.Handler;
+import pkg.game.OverworldHandler;
 import pkg.view.SpriteSheet;
 
 import java.awt.Graphics;
@@ -21,8 +21,8 @@ public class Enemy extends GameObject {
     int timer = 0;
     private final BufferedImage[] enemy_image = new BufferedImage[3];
 
-    public Enemy(int x, int y, Handler handler, SpriteSheet ss) {
-        super(x, y, handler, ss);
+    public Enemy(int x, int y, OverworldHandler overworldHandler, SpriteSheet ss) {
+        super(x, y, overworldHandler, ss);
         enemy_image[0] = ss.grabImage(4, 1, 32, 32);
         enemy_image[1] = ss.grabImage(5, 1, 32, 32);
         enemy_image[2] = ss.grabImage(6, 1, 32, 32);
@@ -40,7 +40,7 @@ public class Enemy extends GameObject {
 
         choose = r.nextInt(50);
 
-        for (GameObject tempObject : handler.getObjects()) {
+        for (GameObject tempObject : overworldHandler.getObjects()) {
 
             if (tempObject instanceof Block) {
                 if (getLeftBounds().intersects(tempObject.getBounds())) {
@@ -78,7 +78,7 @@ public class Enemy extends GameObject {
             if (tempObject instanceof Bullet) {
                 if (getBounds().intersects(tempObject.getBounds())) {
                     hp -= 50;
-                    handler.removeObject(tempObject);
+                    overworldHandler.removeObject(tempObject);
                     velX *= 0.1;
                     velY *= 0.1;
                     slowed = true;
@@ -98,7 +98,7 @@ public class Enemy extends GameObject {
 
         }
 
-        if (hp <= 0) handler.removeObject(this);
+        if (hp <= 0) overworldHandler.removeObject(this);
 	}
 
 

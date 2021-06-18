@@ -1,6 +1,6 @@
 package pkg.models;
 
-import pkg.game.Handler;
+import pkg.game.OverworldHandler;
 import pkg.view.SpriteSheet;
 
 import java.awt.Color;
@@ -20,8 +20,8 @@ public class Block extends GameObject {
      *
      * @param int x, int y, ID id, Handler handler, Spritesheet ss
      */
-    public Block(int x, int y, Handler handler, SpriteSheet ss) {
-        super(x, y, handler, ss);
+    public Block(int x, int y, OverworldHandler overworldHandler, SpriteSheet ss) {
+        super(x, y, overworldHandler, ss);
         block_image = ss.grabImage(5, 2, 32, 32);
     }
 
@@ -54,7 +54,6 @@ public class Block extends GameObject {
      */
     @Override
     public Rectangle getBounds() {
-
         return new Rectangle(x, y, 32, 32);
     }
 

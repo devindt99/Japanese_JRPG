@@ -1,6 +1,6 @@
 package pkg.models;
 
-import pkg.game.Handler;
+import pkg.game.OverworldHandler;
 import pkg.view.SpriteSheet;
 
 import java.awt.Color;
@@ -12,8 +12,8 @@ import java.awt.Rectangle;
  */
 public class Exit extends GameObject { //this is the magenta square that is the "goal" for our game.
 
-    public Exit(int x, int y, Handler handler, SpriteSheet ss) {
-        super(x, y, handler, ss);
+    public Exit(int x, int y, OverworldHandler overworldHandler, SpriteSheet ss) {
+        super(x, y, overworldHandler, ss);
 
     }
 

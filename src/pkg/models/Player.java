@@ -1,7 +1,7 @@
 package pkg.models;
 
 import pkg.game.Game;
-import pkg.game.Handler;
+import pkg.game.OverworldHandler;
 import pkg.view.SpriteSheet;
 
 import java.awt.Graphics;
@@ -23,8 +23,8 @@ public class Player extends GameObject { //Simple player subclass for user-contr
     private final BufferedImage[] player_image = new BufferedImage[3];
 
 
-    public Player(int x, int y, Handler handler, Game game, SpriteSheet ss) {
-        super(x, y, handler, ss);
+    public Player(int x, int y, OverworldHandler overworldHandler, Game game, SpriteSheet ss) {
+        super(x, y, overworldHandler, ss);
         this.game = game;
 
         player_image[0] = ss.grabImage(1, 1, 32, 48);
@@ -45,17 +45,17 @@ public class Player extends GameObject { //Simple player subclass for user-contr
 
 
         //movement
-        if (handler.isUp()) velY = -5;
-        else if (!handler.isDown()) velY = 0;
+        if (overworldHandler.isUp()) velY = -5;
+        else if (!overworldHandler.isDown()) velY = 0;
 
-        if (handler.isDown()) velY = 5;
-        else if (!handler.isUp()) velY = 0;
+        if (overworldHandler.isDown()) velY = 5;
+        else if (!overworldHandler.isUp()) velY = 0;
 
-        if (handler.isRight()) velX = 5;
-        else if (!handler.isLeft()) velX = 0;
+        if (overworldHandler.isRight()) velX = 5;
+        else if (!overworldHandler.isLeft()) velX = 0;
 
-        if (handler.isLeft()) velX = -5;
-        else if (!handler.isRight()) velX = 0;
+        if (overworldHandler.isLeft()) velX = -5;
+        else if (!overworldHandler.isRight()) velX = 0;
 
         if (dmgTaken == true) {
             timer++;
@@ -71,7 +71,7 @@ public class Player extends GameObject { //Simple player subclass for user-contr
 
     private void collision() { //You can fix the sticking by creating separate floor and wall objects
 
-        for (GameObject tempObject : handler.getObjects()) {
+        for (GameObject tempObject : overworldHandler.getObjects()) {
 
             if (tempObject instanceof Block) {
 
@@ -122,7 +122,7 @@ public class Player extends GameObject { //Simple player subclass for user-contr
                 if (getBounds().intersects(tempObject.getBounds())) {
 
                     if (!(game.ammo >= 100))
-                        handler.removeObject(tempObject);
+                        overworldHandler.removeObject(tempObject);
 
                     game.ammo += 10;
                     if (game.ammo > 100)

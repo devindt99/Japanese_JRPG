@@ -1,6 +1,6 @@
 package pkg.models;
 
-import pkg.game.Handler;
+import pkg.game.OverworldHandler;
 import pkg.view.SpriteSheet;
 
 import java.awt.Graphics;
@@ -17,7 +17,7 @@ public abstract class GameObject { //Simple superclass for all game objects
     protected int anim;
     protected float velX = 0;
     protected float velY = 0;
-    protected Handler handler;
+    protected OverworldHandler overworldHandler;
     protected SpriteSheet ss;
 
     /**
@@ -25,11 +25,11 @@ public abstract class GameObject { //Simple superclass for all game objects
      *
      * @param int x, int y, ID id, Handler handler, Spritesheet ss
      */
-    protected GameObject(int x, int y, Handler handler, SpriteSheet ss) {
+    protected GameObject(int x, int y, OverworldHandler overworldHandler, SpriteSheet ss) {
         this.x = x;
         this.y = y;
         this.ss = ss;
-        this.handler = handler;
+        this.overworldHandler = overworldHandler;
     }
 
     public abstract void tick();

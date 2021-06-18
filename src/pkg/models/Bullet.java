@@ -1,6 +1,6 @@
 package pkg.models;
 
-import pkg.game.Handler;
+import pkg.game.OverworldHandler;
 import pkg.view.SpriteSheet;
 
 import java.awt.Color;
@@ -18,13 +18,13 @@ public class Bullet extends GameObject {
      *
      * @param x
      * @param y
-     * @param handler
+     * @param overworldHandler
      * @param mx
      * @param my
      * @param ss
      */
-    public Bullet(int x, int y, Handler handler, int mx, int my, SpriteSheet ss) {
-        super(x, y, handler, ss);
+    public Bullet(int x, int y, OverworldHandler overworldHandler, int mx, int my, SpriteSheet ss) {
+        super(x, y, overworldHandler, ss);
 
         int speed = 10;
 
@@ -42,11 +42,11 @@ public class Bullet extends GameObject {
         x += velX;
         y += velY;
 
-        for (GameObject tempObject : handler.getObjects()) {
+        for (GameObject tempObject : overworldHandler.getObjects()) {
 
             if (tempObject instanceof Block) {
                 if (getBounds().intersects(tempObject.getBounds())) {
-                    handler.removeObject(this);
+                    overworldHandler.removeObject(this);
                 }
             }
 
