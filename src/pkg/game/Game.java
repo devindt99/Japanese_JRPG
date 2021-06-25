@@ -23,22 +23,28 @@ import java.awt.image.BufferedImage;
 /**
  * @author Zack (RealTutsGML), Notch, Devin
  */
-public class Game extends Canvas implements Runnable { //Canvas provides a surface to draw objects onto and runnable lets us use our game thread.
+// Canvas provides a surface to draw objects onto and runnable lets us use our game thread.
+public class Game extends Canvas implements Runnable {
 
     ////////////////////////////////////data fields/////////////////////////////////////
-    private static final long serialVersionUID = 1L; //Serialization isn't strictly necessary in the context of this template, but stops eclipse from flagging the class
-    //These are player data fields. For now, they have been initialized here to be displayed easily as an overlay.
+    // Serialization isn't strictly necessary in the context of this template, but stops eclipse from flagging the class
+    private static final long serialVersionUID = 1L;
+    // These are player data fields. For now, they have been initialized here to be displayed easily as an overlay.
     public int ammo = 100;
     public int hp = 100;
     public boolean nextLvl = false;
     private boolean isRunning = false;
-    private Thread thread; //Threads allow a program to operate more efficiently by doing multiple things at the same time.
-    private Handler handler; //Handler facilitates interactions between objects.
+    // Threads allow a program to operate more efficiently by doing multiple things at the same time.
+    private Thread thread;
+    // Handler facilitates interactions between objects.
+    private Handler handler;
     private BattleHandler battleHandler = null;
     private OverworldHandler overworldHandler = null;
-    private final Camera camera; //The camera follows the Player object to make sure they stay in-frame
-    private final SpriteSheet ss; //SpriteSheet is a collection of sprites (images) to be rendered in the program
-    //A BufferedImage is a graphic that is loaded into the game using the BufferedImageLoader class
+    // The camera follows the Player object to make sure they stay in-frame
+    private final Camera camera;
+    // SpriteSheet is a collection of sprites (images) to be rendered in the program
+    private final SpriteSheet ss;
+    // A BufferedImage is a graphic that is loaded into the game using the BufferedImageLoader class
     private BufferedImage level1 = null;
     private BufferedImage gameOver = null;
     private BufferedImage youWin = null;
@@ -46,7 +52,7 @@ public class Game extends Canvas implements Runnable { //Canvas provides a surfa
     private BufferedImage floor = null;
 
 
-    //Game() constructor holds everything that must be initialized when the game begins, such as levels, input listeners, the camera, etc.
+    // Game() constructor holds everything that must be initialized when the game begins, such as levels, input listeners, the camera, etc.
     public Game() {
         new Window(1000, 563, "Game", this);
 
@@ -60,7 +66,8 @@ public class Game extends Canvas implements Runnable { //Canvas provides a surfa
         sprite_sheet = loader.loadImage("/sprite_sheet.png");
 
         ss = new SpriteSheet(sprite_sheet);
-        floor = ss.grabImage(4, 2, 32, 32); //grabImage lets us pull from our sprite sheet, (row, column, width, height)
+        // grabImage lets us pull from our sprite sheet, (row, column, width, height)
+        floor = ss.grabImage(4, 2, 32, 32);
         level1 = loader.loadImage("/wizard_level.png");
         this.addMouseListener(new MouseInput((OverworldHandler) handler, camera, this, ss));
 
@@ -70,7 +77,8 @@ public class Game extends Canvas implements Runnable { //Canvas provides a surfa
         youWin = loader.loadImage("/you_win.png");
     }
 
-    public void start() { //called to start the thread/start running the game
+    // called to start the thread/start running the game
+    public void start() {
         if (isRunning) {
             return;
         }
@@ -80,7 +88,8 @@ public class Game extends Canvas implements Runnable { //Canvas provides a surfa
         thread.start();
     }
 
-    private void stop() { //called to stop the thread/stop running the game
+    // called to stop the thread/stop running the game
+    private void stop() {
         if (!isRunning) {
             return;
         }
@@ -95,9 +104,9 @@ public class Game extends Canvas implements Runnable { //Canvas provides a surfa
         }
     }
 
-    //The run() method defines the elapsing of time in the game. It is our game loop.
-    //Currently, the game is set to run at 60 fps.
-    //Fun fact: this game loop was provided by Notch, the creator of Minecraft.
+    // The run() method defines the elapsing of time in the game. It is our game loop.
+    // Currently, the game is set to run at 60 fps.
+    // Fun fact: this game loop was provided by Notch, the creator of Minecraft.
     @Override
     public void run() {
         this.requestFocus();
@@ -127,7 +136,8 @@ public class Game extends Canvas implements Runnable { //Canvas provides a surfa
         stop();
     }
 
-    public void tick() { //tick() updates our game each time it is executed. It is essential for our run() method above.
+    // tick() updates our game each time it is executed. It is essential for our run() method above.
+    public void tick() {
 
         for (GameObject obj : handler.getObjects()) {
             if (obj instanceof Player) {
@@ -153,11 +163,13 @@ public class Game extends Canvas implements Runnable { //Canvas provides a surfa
         handler.tick();
     }
 
-    public void unloadLvl() { //removes all GameObjects in the game
+    // removes all GameObjects in the game
+    public void unloadLvl() {
         handler.getObjects().clear();
     }
 
-    public void render() { //render defines all the graphical components of our game.
+    // render defines all the graphical components of our game.
+    public void render() {
         BufferStrategy bs = this.getBufferStrategy();
         if (bs == null) {
             this.createBufferStrategy(3);
@@ -199,15 +211,15 @@ public class Game extends Canvas implements Runnable { //Canvas provides a surfa
         }
     }
 
-    //loadLevel takes a BufferedImage as an argument and loads it as a level in our game.
-    //We can use loadLevel like a level editor.
-    //By default, loadLevel takes images like wizard_level.png and translates colored pixels into in-game objects
-    //Using loadLevel, we can easily design levels using even simple programs like MS Paint.
+    // loadLevel takes a BufferedImage as an argument and loads it as a level in our game.
+    // We can use loadLevel like a level editor.
+    // By default, loadLevel takes images like wizard_level.png and translates colored pixels into in-game objects
+    // Using loadLevel, we can easily design levels using even simple programs like MS Paint.
     private void loadLevel(BufferedImage image) {
         int w = image.getWidth();
         int h = image.getHeight();
 
-        //This for loop looks over a given image file and defines what objects will be produced based on the colors presented in the image file.
+        // This for loop looks over a given image file and defines what objects will be produced based on the colors presented in the image file.
         for (int xx = 0; xx < w; xx++)
             for (int yy = 0; yy < h; yy++) {
                 int pixel = image.getRGB(xx, yy);
@@ -233,7 +245,7 @@ public class Game extends Canvas implements Runnable { //Canvas provides a surfa
             }
     }
 
-    //Our main method, which simply runs everything we have defined above in our Game() constructor.
+    // Our main method, which simply runs everything we have defined above in our Game() constructor.
     public static void main(String[] args) {
         Game game = new Game();
         game.start();
