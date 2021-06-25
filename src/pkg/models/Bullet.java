@@ -42,6 +42,10 @@ public class Bullet extends GameObject {
         x += velX;
         y += velY;
 
+        handleCollisions();
+    }
+
+    private void handleCollisions() {
         for (GameObject tempObject : overworldHandler.getObjects()) {
 
             if (tempObject instanceof Block) {
