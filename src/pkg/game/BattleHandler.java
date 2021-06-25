@@ -6,7 +6,7 @@ import java.awt.*;
 import java.util.Queue;
 import java.util.concurrent.LinkedBlockingQueue;
 
-public class BattleHandler {
+public class BattleHandler implements Handler {
 
     private Queue<GameObject> objects = new LinkedBlockingQueue<>();
 
@@ -36,7 +36,7 @@ public class BattleHandler {
     /**
      * Render() is called to draw objects into our game.
      *
-     * @param Graphics g
+     * @param g
      */
     public void render(Graphics g) {
         for (GameObject tempObject : objects) {
@@ -44,12 +44,12 @@ public class BattleHandler {
         }
     }
 
-    public void addObject(GameObject tempObject) {
-        objects.add(tempObject);
+    public void addObject(GameObject other) {
+        objects.add(other);
     }
 
-    public void removeObject(GameObject tempObject) {
-        objects.remove(tempObject);
+    public void removeObject(GameObject other) {
+        objects.remove(other);
     }
 }
 

@@ -14,7 +14,7 @@ import java.awt.image.BufferedImage;
 public class Player extends GameObject { //Simple player subclass for user-controlled game objects
 
 
-    boolean dmgTaken = false;
+    boolean recovering = false;
     double timer = 0;
     int anim = 0;
     Game game;
@@ -57,12 +57,12 @@ public class Player extends GameObject { //Simple player subclass for user-contr
         if (overworldHandler.isLeft()) velX = -5;
         else if (!overworldHandler.isRight()) velX = 0;
 
-        if (dmgTaken == true) {
+        if (recovering == true) {
             timer++;
 
             if (timer >= 50) {
                 timer = 0;
-                dmgTaken = false;
+                recovering = false;
             }
 
         }
@@ -104,33 +104,24 @@ public class Player extends GameObject { //Simple player subclass for user-contr
             }
 
             if (tempObject instanceof Enemy) {
-
+                // if the bounding box of the player intersects the enemy's
                 if (getBounds().intersects(tempObject.getBounds())) {
-
-
-                    if (dmgTaken == false) {
-                        game.hp -= 20;
-                        dmgTaken = true;
-
-                    }
-
-
+                    game.goToBattleScene();
                 }
             }
             if (tempObject instanceof AmmoCrate) {
 
                 if (getBounds().intersects(tempObject.getBounds())) {
 
-                    if (!(game.ammo >= 100))
+                    if (!(game.ammo >= 100)) {
                         overworldHandler.removeObject(tempObject);
+                    }
 
                     game.ammo += 10;
-                    if (game.ammo > 100)
+                    if (game.ammo > 100) {
                         game.ammo = 100;
-
-
+                    }
                 }
-
             }
 
             if (tempObject instanceof Exit) {
@@ -145,12 +136,12 @@ public class Player extends GameObject { //Simple player subclass for user-contr
     /**
      * Render() is called to draw objects into our game.
      *
-     * @param Graphics g
+     * @param  g
      */
     @Override
     public void render(Graphics g) { //describes how the player object will be rendered in the game window
 
-        if (dmgTaken == false || (((timer / 5) % 1) != 0 && ((timer / 4) % 1) != 0 && ((timer / 3) % 1) != 0)) {
+        if (recovering == false || (((timer / 5) % 1) != 0 && ((timer / 4) % 1) != 0 && ((timer / 3) % 1) != 0)) {
 
 
             animation(g);

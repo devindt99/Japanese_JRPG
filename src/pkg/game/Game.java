@@ -33,7 +33,9 @@ public class Game extends Canvas implements Runnable { //Canvas provides a surfa
     public boolean nextLvl = false;
     private boolean isRunning = false;
     private Thread thread; //Threads allow a program to operate more efficiently by doing multiple things at the same time.
-    private final OverworldHandler overworldHandler; //Handler facilitates interactions between objects.
+    private Handler handler; //Handler facilitates interactions between objects.
+    private BattleHandler battleHandler = null;
+    private OverworldHandler overworldHandler = null;
     private final Camera camera; //The camera follows the Player object to make sure they stay in-frame
     private final SpriteSheet ss; //SpriteSheet is a collection of sprites (images) to be rendered in the program
     //A BufferedImage is a graphic that is loaded into the game using the BufferedImageLoader class
@@ -43,13 +45,15 @@ public class Game extends Canvas implements Runnable { //Canvas provides a surfa
     private BufferedImage sprite_sheet = null;
     private BufferedImage floor = null;
 
+
     //Game() constructor holds everything that must be initialized when the game begins, such as levels, input listeners, the camera, etc.
     public Game() {
         new Window(1000, 563, "Game", this);
 
-        overworldHandler = new OverworldHandler();
+        handler = new OverworldHandler();
+
         camera = new Camera(0, 0);
-        this.addKeyListener(new KeyInput(overworldHandler));
+        this.addKeyListener(new KeyInput((OverworldHandler) handler));
 
         BufferedImageLoader loader = new BufferedImageLoader();
 
@@ -58,7 +62,7 @@ public class Game extends Canvas implements Runnable { //Canvas provides a surfa
         ss = new SpriteSheet(sprite_sheet);
         floor = ss.grabImage(4, 2, 32, 32); //grabImage lets us pull from our sprite sheet, (row, column, width, height)
         level1 = loader.loadImage("/wizard_level.png");
-        this.addMouseListener(new MouseInput(overworldHandler, camera, this, ss));
+        this.addMouseListener(new MouseInput((OverworldHandler) handler, camera, this, ss));
 
         loadLevel(level1);
 
@@ -125,7 +129,7 @@ public class Game extends Canvas implements Runnable { //Canvas provides a surfa
 
     public void tick() { //tick() updates our game each time it is executed. It is essential for our run() method above.
 
-        for (GameObject obj : overworldHandler.getObjects()) {
+        for (GameObject obj : handler.getObjects()) {
             if (obj instanceof Player) {
                 camera.tick(obj);
             }
@@ -146,11 +150,11 @@ public class Game extends Canvas implements Runnable { //Canvas provides a surfa
             camera.setY(0);
             loadLevel(youWin);
         }
-        overworldHandler.tick();
+        handler.tick();
     }
 
     public void unloadLvl() { //removes all GameObjects in the game
-        overworldHandler.getObjects().clear();
+        handler.getObjects().clear();
     }
 
     public void render() { //render defines all the graphical components of our game.
@@ -166,13 +170,9 @@ public class Game extends Canvas implements Runnable { //Canvas provides a surfa
 
         g2d.translate(-camera.getX(), -camera.getY());
 
-        for (int xx = 0; xx < 2160; xx += 32) {
-            for (int yy = 0; yy < 2160; yy += 32) {
-                g.drawImage(floor, xx, yy, null);
-            }
-        }
+        drawBackground(g);
 
-        overworldHandler.render(g);
+        handler.render(g);
 
         g2d.translate(camera.getX(), camera.getY());
 
@@ -189,6 +189,14 @@ public class Game extends Canvas implements Runnable { //Canvas provides a surfa
         //////////////////////////////////////
         g.dispose();
         bs.show();
+    }
+
+    private void drawBackground(Graphics g) {
+        for (int xx = 0; xx < 2160; xx += 32) {
+            for (int yy = 0; yy < 2160; yy += 32) {
+                g.drawImage(floor, xx, yy, null);
+            }
+        }
     }
 
     //loadLevel takes a BufferedImage as an argument and loads it as a level in our game.
@@ -208,19 +216,19 @@ public class Game extends Canvas implements Runnable { //Canvas provides a surfa
                 int blue = (pixel) & 0xff;
 
                 if (red == 255 && green == 0 && blue == 0)
-                    overworldHandler.addObject(new Block(xx * 32, yy * 32, overworldHandler, ss));
+                    handler.addObject(new Block(xx * 32, yy * 32, (OverworldHandler) handler, ss));
 
                 if (green == 255 && blue == 0)
-                    overworldHandler.addObject(new Enemy(xx * 32, yy * 32, overworldHandler, ss));
+                    handler.addObject(new Enemy(xx * 32, yy * 32, (OverworldHandler) handler, ss));
 
                 if (blue == 255 && green == 0 && red == 0)
-                    overworldHandler.addObject(new Player(xx * 32, yy * 32, overworldHandler, this, ss));
+                    handler.addObject(new Player(xx * 32, yy * 32, (OverworldHandler) handler, this, ss));
 
                 if (blue == 255 && green == 255)
-                    overworldHandler.addObject(new AmmoCrate(xx * 32, yy * 32, overworldHandler, ss));
+                    handler.addObject(new AmmoCrate(xx * 32, yy * 32, (OverworldHandler) handler, ss));
 
                 if (blue == 255 && red == 255)
-                    overworldHandler.addObject(new Exit(xx * 32, yy * 32, overworldHandler, ss));
+                    handler.addObject(new Exit(xx * 32, yy * 32, (OverworldHandler) handler, ss));
 
             }
     }
@@ -230,4 +238,10 @@ public class Game extends Canvas implements Runnable { //Canvas provides a surfa
         Game game = new Game();
         game.start();
     }
+
+    public void goToBattleScene() {
+        overworldHandler = (OverworldHandler) handler;
+        handler = new BattleHandler();
+    }
+    enum GameState {OVERWORLD, BATTLE}
 }

@@ -9,7 +9,7 @@ import java.util.concurrent.LinkedBlockingQueue;
 /**
  * @author Zack (RealTutsGML)
  */
-public class OverworldHandler { //Handler class holds, updates, and renders game objects
+public class OverworldHandler implements Handler { //Handler class holds, updates, and renders game objects
 
     private Queue<GameObject> objects = new LinkedBlockingQueue<>();
 
@@ -76,7 +76,7 @@ public class OverworldHandler { //Handler class holds, updates, and renders game
     /**
      * Render() is called to draw objects into our game.
      *
-     * @param Graphics g
+     * @param g
      */
     public void render(Graphics g) {
         for (GameObject tempObject : objects) {
@@ -84,11 +84,11 @@ public class OverworldHandler { //Handler class holds, updates, and renders game
         }
     }
 
-    public void addObject(GameObject tempObject) {
-        objects.add(tempObject);
+    public void addObject(GameObject other) {
+        objects.add(other);
     }
 
-    public void removeObject(GameObject tempObject) {
-        objects.remove(tempObject);
+    public void removeObject(GameObject other) {
+        objects.remove(other);
     }
 }
