@@ -60,7 +60,7 @@ public class Bullet extends GameObject {
     /**
      * Render() is called to draw objects into our game.
      *
-     * @param Graphics g
+     * @param g
      */
     public void render(Graphics g) {
         g.setColor(Color.green);
@@ -110,7 +110,7 @@ public class Bullet extends GameObject {
     /**
      * Unused animation method inherited from GameObject superclass
      *
-     * @param Graphics object g
+     * @param g
      */
     @Override
     public void animation(Graphics g) {
