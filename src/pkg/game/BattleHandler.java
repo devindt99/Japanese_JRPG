@@ -11,7 +11,8 @@ public class BattleHandler implements Handler {
     private Queue<GameObject> objects = new LinkedBlockingQueue<>();
 
 
-    public Queue<GameObject> getObjects() { //GameObjects all stored together in ArrayList
+    // GameObjects all stored together in ArrayList
+    public Queue<GameObject> getObjects() {
         return objects;
     }
 

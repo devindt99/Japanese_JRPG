@@ -9,7 +9,8 @@ import java.util.concurrent.LinkedBlockingQueue;
 /**
  * @author Zack (RealTutsGML)
  */
-public class OverworldHandler implements Handler { //Handler class holds, updates, and renders game objects
+// Handler class holds, updates, and renders game objects
+public class OverworldHandler implements Handler {
 
     private Queue<GameObject> objects = new LinkedBlockingQueue<>();
 
@@ -19,7 +20,8 @@ public class OverworldHandler implements Handler { //Handler class holds, update
     private boolean right;
     private boolean left;
 
-    public Queue<GameObject> getObjects() { //GameObjects all stored together in ArrayList
+    // GameObjects all stored together in ArrayList
+    public Queue<GameObject> getObjects() {
         return objects;
     }
 
@@ -27,7 +29,7 @@ public class OverworldHandler implements Handler { //Handler class holds, update
         this.objects = objects;
     }
 
-    //simple methods/setters used with key inputs to control movement in-game
+    // simple methods/setters used with key inputs to control movement in-game
     public boolean isUp() {
         return up;
     }
